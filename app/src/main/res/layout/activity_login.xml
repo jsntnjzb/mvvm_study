@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            type="com.example.mvvm_study.VM.LoginViewModel"
-            name="viewModel"/>
+            type="com.example.mvvm_study.viewModel.LoginViewModel"
+            name="loginUser"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rl_root"
@@ -65,7 +65,7 @@
                 android:id="@+id/tv_equipmentId_msg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintWidth_percent="0.16"
+                app:layout_constraintWidth_percent="0.2"
                 android:autoSizeTextType="uniform"
                 android:autoSizeMinTextSize="8sp"
                 android:autoSizeMaxTextSize="112sp"
@@ -95,7 +95,7 @@
                 android:paddingLeft="10dp"
                 android:background="@drawable/password_background"
                 android:singleLine="true"
-                android:text="@={viewModel.userName}"/>
+                android:text="@={loginUser.userName}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -114,7 +114,7 @@
             <TextView
                 android:id="@+id/tv_p1"
                 android:layout_width="0dp"
-                app:layout_constraintWidth_percent="0.08"
+                app:layout_constraintWidth_percent="0.1"
                 android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
                 android:autoSizeMinTextSize="8sp"
@@ -133,7 +133,7 @@
             <TextView
                 android:id="@+id/tv_p2"
                 android:layout_width="0dp"
-                app:layout_constraintWidth_percent="0.08"
+                app:layout_constraintWidth_percent="0.1"
                 android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
                 android:autoSizeMinTextSize="8sp"
@@ -166,7 +166,7 @@
                 android:background="@drawable/password_background"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:text="@={viewModel.passWord}"/>
+                android:text="@={loginUser.passWord}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -198,7 +198,8 @@
                 android:enabled="true"
                 android:textColor="#ffffffff"
                 android:textSize="18sp"
-                android:background="@drawable/btn_login_bg_selector"/>
+                android:background="@drawable/btn_login_bg_selector"
+                binding:onClickCommand="@{loginUser.loginOnClickCommand}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

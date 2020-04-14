@@ -1,22 +1,27 @@
-package com.example.mvvm_study.Activity;
+package com.example.mvvm_study.ui;
 
+import android.Manifest;
 import android.os.Bundle;
-import android.view.View;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.mvvm_study.BR;
 import com.example.mvvm_study.R;
-import com.example.mvvm_study.VM.LoginViewModel;
 import com.example.mvvm_study.databinding.ActivityLoginBinding;
+import com.example.mvvm_study.http.entities.BaseResponse;
+import com.example.mvvm_study.viewModel.LoginViewModel;
+import com.example.mvvm_study.widget.WarningDialog;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import io.reactivex.functions.Consumer;
 import me.goldze.mvvmhabit.base.BaseActivity;
 
 
-public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel> implements View.OnClickListener {
-    @Override
-    public void onClick(View v) {
-
-    }
+public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel>{
+    LoginViewModel mLoginViewModel;
+    WarningDialog mWarningDialog;
+    Observer<BaseResponse> mObserver;
 
     @Override
     public int initContentView(Bundle bundle) {
@@ -25,12 +30,65 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
 
     @Override
     public int initVariableId() {
-        return BR.viewModel;
+        return BR.loginUser;
     }
 
     @Override
     public LoginViewModel initViewModel() {
-        return ViewModelProviders.of(this).get(LoginViewModel.class);
+        mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        return mLoginViewModel;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mWarningDialog = new WarningDialog(this,R.layout.warning_dialog,R.style.WarningDialog);
+    }
+
+
+    @Override
+    public void initData() {
+        super.initData();
+        if(mLoginViewModel.showCheckPermissions()){
+            rxLocationPermissionRequest();
+        }
+    }
+
+    @Override
+    public void initViewObservable() {
+        super.initViewObservable();
+        mObserver = new Observer<BaseResponse>() {
+            @Override
+            public void onChanged(final BaseResponse baseResponse) {
+                mWarningDialog.show(false,baseResponse.message);
+            }
+        };
+        mLoginViewModel.getLiveData().observe(this,mObserver);
+    }
+
+    private void rxLocationPermissionRequest() {
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean granted) throws Exception {
+                if (granted) {
+                    //授权
+
+                } else {
+                    // 权限被拒绝
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        mLoginViewModel.getLiveData().removeObserver();
+        mLoginViewModel.onCleared();
+        mWarningDialog.dismiss();
+        mWarningDialog = null;
     }
 
     //    private Button btn_login,btn_cancel;
@@ -53,56 +111,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
 ////        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
 //    }
 //
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        switch (requestCode) {
-//            case LOCATION_CODE: {
-//                for (int i = 0; i < permissions.length; i++) {
-//                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-//                        //选择了“始终允许”
-//                    }else {
-//                        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i])){
-//                            //用户选择了禁止不再询问
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-//                            builder.setTitle("permission")
-//                                    .setMessage("点击允许才可以使用我们的app哦")
-//                                    .setPositiveButton("允许", new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface dialog, int id) {
-//                                            if (mDialog != null && mDialog.isShowing()) {
-//                                                mDialog.dismiss();
-//                                            }
-//                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                                            Uri uri = Uri.fromParts("package", getPackageName(), null);//注意就是"package",不用改成自己的包名
-//                                            intent.setData(uri);
-//                                            startActivityForResult(intent, NOT_NOTICE);
-//                                        }
-//                                    });
-//                            mDialog = builder.create();
-//                            mDialog.setCanceledOnTouchOutside(false);
-//                            mDialog.show();
-//                        }else {
-//                            //选择禁止
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-//                            builder.setTitle("permission")
-//                                    .setMessage("点击允许才可以使用我们的app哦")
-//                                    .setPositiveButton("允许", new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface dialog, int id) {
-//                                            if (alertDialog != null && alertDialog.isShowing()) {
-//                                                alertDialog.dismiss();
-//                                            }
-//                                            checkPermission();
-//                                        }
-//                                    });
-//                            alertDialog = builder.create();
-//                            alertDialog.setCanceledOnTouchOutside(false);
-//                            alertDialog.show();
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
-//    }
+
 //
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -220,24 +229,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
 //        }
 //    };
 //
-//    /**
-//     * 获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
-//     * */
-//    private void checkPermission(){
-//        if(showCheckPermissions()){
-//            //获取位置权限
-//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                    || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                //请求权限
-//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
-//            } else {
-//                //已经获取到了权限
-//                //打开位置监听
-//
-//            }
-//        }
-//    }
+
 //
 //    @Override
 //    public void onClick(View v) {

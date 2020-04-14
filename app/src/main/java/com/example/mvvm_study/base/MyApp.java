@@ -1,9 +1,9 @@
-package com.example.mvvm_study.App;
+package com.example.mvvm_study.base;
 
 import android.content.Context;
 
-import com.example.mvvm_study.Activity.MainActivity;
 import com.example.mvvm_study.R;
+import com.example.mvvm_study.ui.MainActivity;
 
 import me.goldze.mvvmhabit.base.BaseApplication;
 import me.goldze.mvvmhabit.crash.CaocConfig;
