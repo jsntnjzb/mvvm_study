@@ -2,7 +2,6 @@ package com.example.mvvm_study.http;
 
 import android.content.Context;
 
-import com.example.mvvm_study.R;
 import com.example.mvvm_study.http.entities.BaseResponse;
 import com.example.mvvm_study.http.service.OnBaseListener;
 
