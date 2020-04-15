@@ -21,7 +21,7 @@ import me.goldze.mvvmhabit.base.BaseActivity;
 public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel>{
     LoginViewModel mLoginViewModel;
     WarningDialog mWarningDialog;
-    Observer<BaseResponse> mObserver;
+    Observer<BaseResponse> mNetObserver,mObserver;
 
     @Override
     public int initContentView(Bundle bundle) {
@@ -49,6 +49,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     public void initData() {
         super.initData();
+        //动态权限申请
         if(mLoginViewModel.showCheckPermissions()){
             rxLocationPermissionRequest();
         }
@@ -57,13 +58,27 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     public void initViewObservable() {
         super.initViewObservable();
-        mObserver = new Observer<BaseResponse>() {
+        //监听网络连接情况
+        mNetObserver = new Observer<BaseResponse>() {
             @Override
             public void onChanged(final BaseResponse baseResponse) {
+                if(baseResponse==null){
+                    mLoginViewModel.isConnected = false;
+                }else {
+                    mLoginViewModel.isConnected = true;
+                }
+            }
+        };
+        mLoginViewModel.getBaseLiveData().observe(this,mNetObserver);
+
+        //监听用户输入值变化
+        mObserver = new Observer<BaseResponse>() {
+            @Override
+            public void onChanged(BaseResponse baseResponse) {
                 mWarningDialog.show(false,baseResponse.message);
             }
         };
-        mLoginViewModel.getLiveData().observe(this,mObserver);
+        mLoginViewModel.mLiveData.observe(this,mObserver);
     }
 
     private void rxLocationPermissionRequest() {
@@ -85,7 +100,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mLoginViewModel.getLiveData().removeObserver();
+        mLoginViewModel.mLiveData.removeObserver(mObserver);
         mLoginViewModel.onCleared();
         mWarningDialog.dismiss();
         mWarningDialog = null;

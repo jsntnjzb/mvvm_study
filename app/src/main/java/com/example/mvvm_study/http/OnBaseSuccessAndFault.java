@@ -1,16 +1,12 @@
 package com.example.mvvm_study.http;
 
 import android.text.TextUtils;
-import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
-import com.example.mvvm_study.Utils.JsonUtil;
 import com.example.mvvm_study.http.entities.BaseResponse;
 import com.example.mvvm_study.http.service.OnBaseListener;
 
 import java.io.IOException;
+
 import io.reactivex.observers.DisposableObserver;
 import me.goldze.mvvmhabit.http.ExceptionHandle;
 import me.goldze.mvvmhabit.http.ResponseThrowable;
@@ -25,7 +21,7 @@ public abstract class OnBaseSuccessAndFault<T> extends DisposableObserver<T> {
     ResponseBody                                              responseBody;
     ResponseThrowable                                         mResponseThrowable;
     int                                                       code;
-    BaseResponse<T> baseResponse = new BaseResponse<>();
+    BaseResponse baseResponse = new BaseResponse();
     OnBaseListener<T> mOnBaseListener;
 
     /**
@@ -42,7 +38,6 @@ public abstract class OnBaseSuccessAndFault<T> extends DisposableObserver<T> {
 
     @Override
     public void onNext(T t) {
-
     }
 
     @Override
@@ -60,32 +55,35 @@ public abstract class OnBaseSuccessAndFault<T> extends DisposableObserver<T> {
     public void onError(Throwable e) {
         mResponseThrowable = ExceptionHandle.handleException(e);
         code = mResponseThrowable.code;
+        httpException = (HttpException) e;
+        //获取服务器返回message
+        response = httpException.response();
+        responseBody = response.errorBody();
         if(code==1003){
             //Http Error
-            httpException = (HttpException) e;
-            //获取服务器返回message
-            response = httpException.response();
-            responseBody = response.errorBody();
-            BaseResponse<T> response = null;
             try {
+                baseResponse.code = httpException.code();
                 msg = responseBody.string();
-                response = JsonUtil.Str2JsonBean(msg,baseResponse.getClass());
+                if(!TextUtils.isEmpty(msg)){
+                    baseResponse.message = msg;
+                }
+                switch (baseResponse.code){
+                    case 400:
+                    case 500:
+                        mOnBaseListener.onFault((T) baseResponse);
+                        break;
+                    case 401:
+                        //重新调用登录接口
+                        // mOnBaseListener.onFault(response.data);
+                        break;
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            switch (httpException.code()){
-                case 500:
-                    if(responseBody!=null){
-                        mOnBaseListener.onFault(response.data);
-                    }
-                    break;
-                case 401:
-                    //重新调用登录接口
-                    mOnBaseListener.onFault(response.data);
-                    break;
-            }
         }else {
-            mOnBaseListener.onFault(null);
+            baseResponse.code = httpException.code();
+            baseResponse.message = mResponseThrowable.message;
+            mOnBaseListener.onFault((T) baseResponse);
         }
     }
 }
