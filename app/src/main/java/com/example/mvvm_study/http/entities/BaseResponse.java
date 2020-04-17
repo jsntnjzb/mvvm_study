@@ -8,6 +8,6 @@ import java.io.Serializable;
 public class BaseResponse<T> implements Serializable {
     public String  message;
     public int     code;
-    public boolean isConnected;
+    public boolean isConnected = true;
     public T       data;
 }
