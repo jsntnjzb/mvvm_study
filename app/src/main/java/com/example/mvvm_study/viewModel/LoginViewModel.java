@@ -10,7 +10,6 @@ import androidx.annotation.RequiresApi;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.mvvm_study.Utils.ConstUtils;
 import com.example.mvvm_study.http.HttpImpl;
 import com.example.mvvm_study.http.entities.BaseResponse;
 
@@ -22,6 +21,7 @@ import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
 import me.goldze.mvvmhabit.bus.RxBus;
 import me.goldze.mvvmhabit.bus.RxSubscriptions;
+import me.goldze.mvvmhabit.utils.SPUtils;
 
 /**
  * 创建者 Chuhui
@@ -56,15 +56,16 @@ public class LoginViewModel extends MyBaseViewModel {
                     public void accept(BaseResponse response) throws Exception {
                         switch (response.code){
                             case 200:
-                                //登录成功
-                                isConnected = true;
+                                /**
+                                 * 登录成功
+                                 * */
+                                mLiveData.setValue("");
                                 break;
                             default:
                                 //发送登录结果到view
-                                //mLiveData.postValue(response);
+                                mLiveData.setValue(response.message);
                                 break;
                         }
-
                     }
                 });
         //将订阅者加入管理站
@@ -113,17 +114,15 @@ public class LoginViewModel extends MyBaseViewModel {
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void call() {
-            if(TextUtils.isEmpty(userName.get())){
+            if(!isConnected){
+                mLiveData.setValue("网络未连接");
+            }else if(TextUtils.isEmpty(userName.get())){
                 mLiveData.setValue("请输入设备号");
             }else if(TextUtils.isEmpty(passWord.get())){
                 mLiveData.setValue("请输入密码");
             }else {
-                if(!isConnected){
-                    mLiveData.setValue("网络未连接");
-                }else {
-                    //调用登录接口
-                    mHttp.Login(userName.get(),passWord.get());
-                }
+                //调用登录接口
+                mHttp.Login(userName.get(),passWord.get());
             }
         }
     });

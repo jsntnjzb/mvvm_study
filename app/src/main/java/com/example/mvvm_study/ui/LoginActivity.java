@@ -1,8 +1,7 @@
 package com.example.mvvm_study.ui;
 
 import android.Manifest;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -11,12 +10,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.mvvm_study.BR;
-import com.example.mvvm_study.broadcastReceiver.NetworkReceiver;
 import com.example.mvvm_study.R;
+import com.example.mvvm_study.Utils.ConstUtils;
+import com.example.mvvm_study.Utils.ServiceUtils;
 import com.example.mvvm_study.base.ARouterPath;
 import com.example.mvvm_study.databinding.ActivityLoginBinding;
-import com.example.mvvm_study.http.entities.BaseResponse;
 import com.example.mvvm_study.liveData.NetworkLiveData;
+import com.example.mvvm_study.liveData.ServiceLiveData;
+import com.example.mvvm_study.service.ForegroundService;
 import com.example.mvvm_study.viewModel.LoginViewModel;
 import com.example.mvvm_study.widget.WarningDialog;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -30,7 +31,7 @@ import me.goldze.mvvmhabit.utils.SPUtils;
 public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel>{
     LoginViewModel mLoginViewModel;
     WarningDialog mWarningDialog;
-    Observer<String> mObserver;
+    Observer<String> mNetObserver,mLoginObserver;
 
     @Override
     public int initContentView(Bundle bundle) {
@@ -67,34 +68,44 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     public void initViewObservable() {
         super.initViewObservable();
-        //监听错误消息
-        mObserver = new Observer<String>() {
+        mNetObserver = new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                mWarningDialog.show(false,message);
-                //网络是否连接
-                mLoginViewModel.isConnected = NetworkLiveData.getInstance(LoginActivity.this).isNetConnected();
-//                if(baseResponse!=null){
-//                    if(!TextUtils.isEmpty(baseResponse.message)){
-//                        mWarningDialog.show(false,baseResponse.message);
-//                    }
-//                    if(baseResponse.code==200){
-//                        //保存设备号,密码
-//                        SPUtils.getInstance().put("equipmentId",mLoginViewModel.userName.get());
-//                        SPUtils.getInstance().put("pwd",mLoginViewModel.passWord.get());
-//                        //开启service
-//
-//                        //登录成功,跳转至管理员模式activity
-//                        ARouter.getInstance().build(ARouterPath.AdminMenuAty).navigation();
-//                        AppManager.getAppManager().finishActivity(LoginActivity.this);
-//                        finish();
-//                    }
-//                }
+                if(!TextUtils.isEmpty(message)){
+                    mWarningDialog.show(false,message);
+                    mLoginViewModel.isConnected = false;
+                }else {
+                    mLoginViewModel.isConnected = true;
+                }
             }
         };
-        mLoginViewModel.mLiveData.observe(this,mObserver);
-        //网络监测
-        NetworkLiveData.getInstance(this).observe(this,mObserver);
+        //网络监测回调
+        NetworkLiveData.getInstance(this).observeForever(mNetObserver);
+
+        mLoginObserver = new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if(!TextUtils.isEmpty(s)){
+                    mWarningDialog.show(false,s);
+                }else {
+                    //保存设备号,密码
+                    SPUtils.getInstance().put("equipmentId",mLoginViewModel.userName.get());
+                    SPUtils.getInstance().put("pwd",mLoginViewModel.passWord.get());
+                    //开启service
+                    Intent intent = new Intent(LoginActivity.this, ForegroundService.class);
+                   // intent.setAction(ConstUtils.LOGINSUCCESS);
+                    ServiceUtils.startService(LoginActivity.this,intent);
+//                    ServiceLiveData.getInstance(LoginActivity.this).observeForever();
+
+                    //登录成功,跳转至管理员模式activity
+                    ARouter.getInstance().build(ARouterPath.AdminMenuAty).navigation();
+                    AppManager.getAppManager().finishActivity(LoginActivity.this);
+                    finish();
+                }
+            }
+        };
+        //登录结果监测回调
+        mLoginViewModel.mLiveData.observe(this,mLoginObserver);
     }
 
     private void rxLocationPermissionRequest() {
@@ -116,7 +127,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLoginViewModel.mLiveData.removeObserver(mObserver);
+//        mLoginViewModel.mLiveData.removeObserver(mLoginObserver);
+        NetworkLiveData.getInstance(this).removeObserver(mNetObserver);
         mWarningDialog.dismiss();
         mWarningDialog = null;
     }

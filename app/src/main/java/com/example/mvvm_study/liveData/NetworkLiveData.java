@@ -4,18 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-
-import com.example.mvvm_study.Utils.ConstUtils;
-import com.example.mvvm_study.broadcastReceiver.NetworkReceiver;
-
-import me.goldze.mvvmhabit.bus.RxBus;
 
 /**
  * 创建者 Chuhui
@@ -30,7 +24,7 @@ public class NetworkLiveData extends LiveData<String> {
     private final        IntentFilter    mIntentFilter;
     private              String          tip_msg;//网络变化的提示消息
     private static final String          TAG = "NetworkLiveData";
-    private boolean isNetConnected;//网络是否连接
+    private boolean isNetConnected = true;//网络是否连接
     public boolean isNetConnected() {
         return isNetConnected;
     }
@@ -71,7 +65,7 @@ public class NetworkLiveData extends LiveData<String> {
             ConnectivityManager conn = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = conn.getActiveNetworkInfo();
             if (networkInfo == null) {
-                tip_msg = "未接入网络";
+                tip_msg = "网络未连接";
             } else if (!networkInfo.isConnected()) {
                 tip_msg = "网络未连接";
             } else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
@@ -83,10 +77,10 @@ public class NetworkLiveData extends LiveData<String> {
             }
             if(!TextUtils.isEmpty(tip_msg)){
                 isNetConnected = false;
-                mNetworkLiveData.setValue(tip_msg);
             }else {
                 isNetConnected = true;
             }
+            mNetworkLiveData.setValue(tip_msg);
         }
     }
 }

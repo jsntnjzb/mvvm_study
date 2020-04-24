@@ -34,6 +34,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.AdminMenuActivity"/>
+
+
+        <service android:name=".service.ForegroundService"
+            android:enabled="true">
+            <!--设置优先级-->
+            <intent-filter android:priority="1000">
+<!--                <action android:name="com.example.mvvm_study.service."></action>-->
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

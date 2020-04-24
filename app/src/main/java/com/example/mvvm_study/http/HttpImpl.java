@@ -1,10 +1,8 @@
 package com.example.mvvm_study.http;
 
 import android.content.Context;
-import android.os.Build;
-import android.util.ArrayMap;
 
-import androidx.annotation.RequiresApi;
+import androidx.collection.ArrayMap;
 
 import com.example.mvvm_study.http.entities.BaseResponse;
 import com.example.mvvm_study.http.service.HttpInterface;
@@ -30,7 +28,6 @@ public class HttpImpl implements HttpInterface {
      * @param deviceCode 设备号
      * @param password   密码
      */
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void Login(final String deviceCode, final String password) {
         final ArrayMap<String,String> map = new ArrayMap<>();

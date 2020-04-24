@@ -8,9 +8,6 @@ import android.net.NetworkInfo;
 
 import com.example.mvvm_study.Utils.ConstUtils;
 import com.example.mvvm_study.http.entities.BaseResponse;
-import com.example.mvvm_study.liveData.NetworkLiveData;
-
-import me.goldze.mvvmhabit.bus.RxBus;
 
 public class NetworkReceiver extends BroadcastReceiver {
     @Override
