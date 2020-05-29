@@ -1,27 +1,37 @@
 package com.example.mvvm_study.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.mvvm_study.BR;
 import com.example.mvvm_study.R;
+import com.example.mvvm_study.Utils.ConstUtils;
+import com.example.mvvm_study.Utils.ServiceUtils;
+import com.example.mvvm_study.base.ARouterPath;
 import com.example.mvvm_study.databinding.ActivityLoginBinding;
-import com.example.mvvm_study.http.entities.BaseResponse;
+import com.example.mvvm_study.liveData.NetworkLiveData;
+import com.example.mvvm_study.liveData.ServiceLiveData;
+import com.example.mvvm_study.service.ForegroundService;
 import com.example.mvvm_study.viewModel.LoginViewModel;
 import com.example.mvvm_study.widget.WarningDialog;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
+import me.goldze.mvvmhabit.base.AppManager;
 import me.goldze.mvvmhabit.base.BaseActivity;
+import me.goldze.mvvmhabit.utils.SPUtils;
 
 
 public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel>{
     LoginViewModel mLoginViewModel;
     WarningDialog mWarningDialog;
-    Observer<BaseResponse> mNetObserver,mObserver;
+    Observer<String> mNetObserver,mLoginObserver;
 
     @Override
     public int initContentView(Bundle bundle) {
@@ -58,27 +68,44 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     public void initViewObservable() {
         super.initViewObservable();
-        //监听网络连接情况
-        mNetObserver = new Observer<BaseResponse>() {
+        mNetObserver = new Observer<String>() {
             @Override
-            public void onChanged(final BaseResponse baseResponse) {
-                if(baseResponse==null){
+            public void onChanged(String message) {
+                if(!TextUtils.isEmpty(message)){
+                    mWarningDialog.show(false,message);
                     mLoginViewModel.isConnected = false;
                 }else {
                     mLoginViewModel.isConnected = true;
                 }
             }
         };
-        mLoginViewModel.getBaseLiveData().observe(this,mNetObserver);
+        //网络监测回调
+        NetworkLiveData.getInstance(this).observeForever(mNetObserver);
 
-        //监听用户输入值变化
-        mObserver = new Observer<BaseResponse>() {
+        mLoginObserver = new Observer<String>() {
             @Override
-            public void onChanged(BaseResponse baseResponse) {
-                mWarningDialog.show(false,baseResponse.message);
+            public void onChanged(String s) {
+                if(!TextUtils.isEmpty(s)){
+                    mWarningDialog.show(false,s);
+                }else {
+                    //保存设备号,密码
+                    SPUtils.getInstance().put("equipmentId",mLoginViewModel.userName.get());
+                    SPUtils.getInstance().put("pwd",mLoginViewModel.passWord.get());
+                    //开启service
+                    Intent intent = new Intent(LoginActivity.this, ForegroundService.class);
+                   // intent.setAction(ConstUtils.LOGINSUCCESS);
+                    ServiceUtils.startService(LoginActivity.this,intent);
+//                    ServiceLiveData.getInstance(LoginActivity.this).observeForever();
+
+                    //登录成功,跳转至管理员模式activity
+                    ARouter.getInstance().build(ARouterPath.AdminMenuAty).navigation();
+                    AppManager.getAppManager().finishActivity(LoginActivity.this);
+                    finish();
+                }
             }
         };
-        mLoginViewModel.mLiveData.observe(this,mObserver);
+        //登录结果监测回调
+        mLoginViewModel.mLiveData.observe(this,mLoginObserver);
     }
 
     private void rxLocationPermissionRequest() {
@@ -100,171 +127,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLoginViewModel.mLiveData.removeObserver(mObserver);
-        mLoginViewModel.onCleared();
+//        mLoginViewModel.mLiveData.removeObserver(mLoginObserver);
+        NetworkLiveData.getInstance(this).removeObserver(mNetObserver);
         mWarningDialog.dismiss();
         mWarningDialog = null;
     }
-
-    //    private Button btn_login,btn_cancel;
-//    private EditText        edit_password;
-//    private SwipeBackLayout mSwipeBackLayout;
-//    private              AlertDialog         alertDialog;
-//    private              AlertDialog         mDialog;
-//    EditText    edit_equipmentId;
-//    HttpImpl impl;
-//    String equipmentId,pwd;
-//    public static Handler mHandler;
-//
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        checkPermission();
-////        setSwipeBackEnable(true);
-////        mSwipeBackLayout = getSwipeBackLayout();
-////        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
-//    }
-//
-
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode==NOT_NOTICE){
-//            //由于不知道是否选择了允许所以需要再次判断
-//            checkPermission();
-//        }
-//    }
-//
-//    @Override
-//    protected void afterServiceConnected(IBinder iBinder) {
-//
-//    }
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//    }
-//
-//    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//    }
-//
-//    @Override
-//    protected void initData() {
-//        if(SPUtils.contains(LoginActivity.this,"equipmentId")){
-//            equipmentId = String.valueOf(SPUtils.get(LoginActivity.this,"equipmentId",""));
-//            edit_equipmentId.setText(equipmentId);
-//        }
-//        if(SPUtils.contains(LoginActivity.this,"pwd")){
-//            pwd = String.valueOf(SPUtils.get(LoginActivity.this,"pwd",""));
-//            edit_password.setText(pwd);
-//        }
-//        if(mHandler==null){
-//            mHandler = new Handler(Looper.getMainLooper(),loginCallBack);
-//        }
-//        impl = new HttpImpl(new WeakReference<Context>(LoginActivity.this));
-//    }
-//
-//    @Override
-//    protected void initView() {
-//        btn_login = findViewById(R.id.btn_login);
-//        btn_login.setOnClickListener(this);
-//        edit_password = findViewById(R.id.edit_password);
-//        btn_cancel = findViewById(R.id.btn_cancel);
-//        btn_cancel.setOnClickListener(this);
-//        edit_equipmentId = findViewById(R.id.edit_equipmentId);
-//        if(mWarningDialog==null){
-//            mWarningDialog = new WarningDialog(this,R.layout.warning_dialog,R.style.WarningDialog);
-//        }
-//    }
-//
-//    @Override
-//    protected void addActivity() {
-//        AppManager.getAppManager().addActivity(this);
-//    }
-//
-//    @Override
-//    protected void finishActivity() {
-//        AppManager.getAppManager().finishActivity(this);
-//    }
-//
-//    @Override
-//    protected int layoutId() {
-//        return R.layout.activity_login;
-//    }
-//
-//    @Override
-//    protected void registerReceiver() {
-//
-//    }
-//
-//    @Override
-//    protected void unregisterReceiver() {
-//
-//    }
-//
-//    @Override
-//    protected void removeMessage() {
-//        if(mHandler!=null){
-//            mHandler.removeCallbacksAndMessages(null);
-//            mHandler = null;
-//        }
-//    }
-//
-//    Handler.Callback loginCallBack = new Handler.Callback() {
-//        @Override
-//        public boolean handleMessage(@NonNull Message msg) {
-//            switch (msg.what){
-//                case ConstUtils.LOGINSUCCESSFUL:
-//                    //登录成功
-//                    btn_login.setEnabled(true);
-//                    MyApp.getInstance().equipmentId = equipmentId;
-////                    MyApp.getInstance().isLoginSuccess = true;
-//                    SPUtils.put(LoginActivity.this,"equipmentId",equipmentId);
-//                    SPUtils.put(LoginActivity.this,"pwd",pwd);
-//                    LogUtils.d("登录成功");
-//                    Intent intent = new Intent(LoginActivity.this,ForegroundService.class);
-//                    intent.setAction(ConstUtils.LOGINSUCCESS);
-//                    ForegroundService.startService(LoginActivity.this,intent);
-//                    UiUtils.startNewActivity(LoginActivity.this,AdminMenuActivity.class,0);
-//                    LoginActivity.this.finish();
-//                    break;
-//                case ConstUtils.LOGINFAILED:
-//                    //弹出框提示错误信息
-//                    btn_login.setEnabled(true);
-//                    mWarningDialog.show(false,msg.obj.toString());
-//                    break;
-//                default:
-//                    break;
-//            }
-//            return false;
-//        }
-//    };
-//
-
-//
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.btn_login:
-//                equipmentId = edit_equipmentId.getText().toString().trim();
-//                pwd = edit_password.getText().toString().trim();
-//                if (equipmentId.length() <= 0) {
-//                    mWarningDialog.show(false,"请输入设备号");
-//                    return;
-//                }
-//                if (pwd.length() <= 0) {
-//                    mWarningDialog.show(false,"请输入密码");
-//                    return;
-//                }
-//                impl.Login(equipmentId, pwd);
-//                break;
-//            case R.id.btn_cancel:
-//                finish();
-//                break;
-//        }
-//    }
 }

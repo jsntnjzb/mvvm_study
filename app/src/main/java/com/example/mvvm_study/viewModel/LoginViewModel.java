@@ -21,6 +21,7 @@ import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
 import me.goldze.mvvmhabit.bus.RxBus;
 import me.goldze.mvvmhabit.bus.RxSubscriptions;
+import me.goldze.mvvmhabit.utils.SPUtils;
 
 /**
  * 创建者 Chuhui
@@ -30,9 +31,8 @@ import me.goldze.mvvmhabit.bus.RxSubscriptions;
  */
 public class LoginViewModel extends MyBaseViewModel {
     Context                       mContext;
-    public MutableLiveData<BaseResponse> mLiveData;
     HttpImpl                      mHttp;
-    BaseResponse mBaseResponse;
+    public MutableLiveData<String> mLiveData;
     //订阅者
     private Disposable mSubscription;
     public LoginViewModel(@NonNull Application application){
@@ -40,7 +40,6 @@ public class LoginViewModel extends MyBaseViewModel {
         mContext = getApplication().getApplicationContext();
         mHttp = new HttpImpl(new WeakReference<Context>(mContext));
         mLiveData = new MutableLiveData<>();
-        mBaseResponse = new BaseResponse();
     }
 
     @Override
@@ -55,9 +54,18 @@ public class LoginViewModel extends MyBaseViewModel {
                 .subscribe(new Consumer<BaseResponse>() {
                     @Override
                     public void accept(BaseResponse response) throws Exception {
-
-                        //mBaseResponse.message = s;
-                        mLiveData.postValue(mBaseResponse);
+                        switch (response.code){
+                            case 200:
+                                /**
+                                 * 登录成功
+                                 * */
+                                mLiveData.setValue("");
+                                break;
+                            default:
+                                //发送登录结果到view
+                                mLiveData.setValue(response.message);
+                                break;
+                        }
                     }
                 });
         //将订阅者加入管理站
@@ -70,15 +78,16 @@ public class LoginViewModel extends MyBaseViewModel {
         RxSubscriptions.remove(mSubscription);
     }
 
+
     @Override
     public void onDestroy() {
+        mSubscription.dispose();
         super.onDestroy();
     }
 
     @Override
     public void onCleared() {
         super.onCleared();
-
     }
 
     /**
@@ -105,20 +114,15 @@ public class LoginViewModel extends MyBaseViewModel {
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void call() {
-            if(TextUtils.isEmpty(userName.get())){
-                mBaseResponse.message = "请输入设备号";
-                mLiveData.postValue(mBaseResponse);
+            if(!isConnected){
+                mLiveData.setValue("网络未连接");
+            }else if(TextUtils.isEmpty(userName.get())){
+                mLiveData.setValue("请输入设备号");
             }else if(TextUtils.isEmpty(passWord.get())){
-                mBaseResponse.message = "请输入密码";
-                mLiveData.postValue(mBaseResponse);
+                mLiveData.setValue("请输入密码");
             }else {
-                if(!isConnected){
-                    mBaseResponse.message = "请检查网络连接";
-                    mLiveData.postValue(mBaseResponse);
-                }else {
-                    //调用登录接口
-                    mHttp.Login(userName.get(),passWord.get());
-                }
+                //调用登录接口
+                mHttp.Login(userName.get(),passWord.get());
             }
         }
     });

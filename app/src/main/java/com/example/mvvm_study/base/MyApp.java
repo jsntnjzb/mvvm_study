@@ -2,6 +2,7 @@ package com.example.mvvm_study.base;
 
 import android.content.Context;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.mvvm_study.R;
 import com.example.mvvm_study.ui.MainActivity;
 
@@ -16,6 +17,9 @@ import me.goldze.mvvmhabit.utils.KLog;
  * @描述
  */
 public class MyApp extends BaseApplication {
+    //ARouter调试开关
+    private boolean isDebugARouter = true;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -24,6 +28,13 @@ public class MyApp extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        if(isDebugARouter){
+            ARouter.openLog();
+            ARouter.openDebug();
+        }
+        //初始化
+        ARouter.init(this);
+
         //是否开启日志打印
         KLog.init(true);
         //配置全局异常崩溃操作
@@ -39,5 +50,11 @@ public class MyApp extends BaseApplication {
                 //.errorActivity(YourCustomErrorActivity.class) //崩溃后的错误activity
                 //.eventListener(new YourCustomEventListener()) //崩溃后的错误监听
                 .apply();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        ARouter.getInstance().destroy();
     }
 }

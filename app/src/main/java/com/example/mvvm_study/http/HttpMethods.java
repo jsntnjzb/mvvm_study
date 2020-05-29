@@ -74,7 +74,7 @@ public class HttpMethods {
         mCookieStore = new PersistentCookieStore(MyApp.getInstance());
         mCookieJar = new CookieJarImpl(mCookieStore);
         okHttpBuilder.addInterceptor(loggingInterceptor)
-//                .cookieJar(mCookieJar)//cookie管理
+                .cookieJar(mCookieJar)//cookie管理
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .build();
 

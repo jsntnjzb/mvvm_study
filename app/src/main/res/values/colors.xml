@@ -6,4 +6,5 @@
 
     <!-- 应用启动页(StartingWindow)的theme的背景色 -->
     <color name="startingwindow_bgcolor">#638291</color>
+    <color name="admin_head_bg_color">#fffa9e19</color>
 </resources>
