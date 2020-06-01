@@ -7,6 +7,8 @@ package com.example.mvvm_study.base;
  * @描述 路由path
  */
 public class ARouterPath {
-    /**管理员模式Activity*/
+    /**
+     * 管理员模式Activity
+     */
     public static final String AdminMenuAty = "/admin/admin_menu";
 }

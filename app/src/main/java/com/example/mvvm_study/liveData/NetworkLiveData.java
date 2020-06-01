@@ -23,8 +23,9 @@ public class NetworkLiveData extends LiveData<String> {
     private              NetworkReceiver mNetworkReceiver;
     private final        IntentFilter    mIntentFilter;
     private              String          tip_msg;//网络变化的提示消息
-    private static final String          TAG = "NetworkLiveData";
-    private boolean isNetConnected = true;//网络是否连接
+    private static final String          TAG            = "NetworkLiveData";
+    private              boolean         isNetConnected = true;//网络是否连接
+
     public boolean isNetConnected() {
         return isNetConnected;
     }
@@ -75,9 +76,9 @@ public class NetworkLiveData extends LiveData<String> {
                 //手机网络
                 tip_msg = "";
             }
-            if(!TextUtils.isEmpty(tip_msg)){
+            if (!TextUtils.isEmpty(tip_msg)) {
                 isNetConnected = false;
-            }else {
+            } else {
                 isNetConnected = true;
             }
             mNetworkLiveData.setValue(tip_msg);

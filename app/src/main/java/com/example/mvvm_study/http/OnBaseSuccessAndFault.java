@@ -15,13 +15,13 @@ import retrofit2.HttpException;
 import retrofit2.Response;
 
 public abstract class OnBaseSuccessAndFault<T> extends DisposableObserver<T> {
-    String                                                    msg;
-    HttpException                                             httpException;
-    Response                                                  response;
-    ResponseBody                                              responseBody;
-    ResponseThrowable                                         mResponseThrowable;
-    int                                                       code;
-    BaseResponse baseResponse = new BaseResponse();
+    String            msg;
+    HttpException     httpException;
+    Response          response;
+    ResponseBody      responseBody;
+    ResponseThrowable mResponseThrowable;
+    int               code;
+    BaseResponse      baseResponse = new BaseResponse();
     OnBaseListener<T> mOnBaseListener;
 
     /**
@@ -46,7 +46,6 @@ public abstract class OnBaseSuccessAndFault<T> extends DisposableObserver<T> {
     }
 
 
-
     /**
      * 对错误进行统一处理
      * 隐藏ProgressDialog
@@ -59,15 +58,15 @@ public abstract class OnBaseSuccessAndFault<T> extends DisposableObserver<T> {
         //获取服务器返回message
         response = httpException.response();
         responseBody = response.errorBody();
-        if(code==1003){
+        if (code == 1003) {
             //Http Error
             try {
                 baseResponse.code = httpException.code();
                 msg = responseBody.string();
-                if(!TextUtils.isEmpty(msg)){
+                if (!TextUtils.isEmpty(msg)) {
                     baseResponse.message = msg;
                 }
-                switch (baseResponse.code){
+                switch (baseResponse.code) {
                     case 400:
                     case 500:
                         mOnBaseListener.onFault((T) baseResponse);
@@ -80,7 +79,7 @@ public abstract class OnBaseSuccessAndFault<T> extends DisposableObserver<T> {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }else {
+        } else {
             baseResponse.code = httpException.code();
             baseResponse.message = mResponseThrowable.message;
             mOnBaseListener.onFault((T) baseResponse);

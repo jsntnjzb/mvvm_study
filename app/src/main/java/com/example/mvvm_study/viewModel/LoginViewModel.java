@@ -5,23 +5,21 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mvvm_study.http.HttpImpl;
 import com.example.mvvm_study.http.entities.BaseResponse;
 
 import java.lang.ref.WeakReference;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import me.goldze.mvvmhabit.binding.command.BindingAction;
 import me.goldze.mvvmhabit.binding.command.BindingCommand;
 import me.goldze.mvvmhabit.bus.RxBus;
 import me.goldze.mvvmhabit.bus.RxSubscriptions;
-import me.goldze.mvvmhabit.utils.SPUtils;
 
 /**
  * 创建者 Chuhui
@@ -30,12 +28,13 @@ import me.goldze.mvvmhabit.utils.SPUtils;
  * @描述 登录viewModel
  */
 public class LoginViewModel extends MyBaseViewModel {
-    Context                       mContext;
-    HttpImpl                      mHttp;
-    public MutableLiveData<String> mLiveData;
+    Context  mContext;
+    HttpImpl mHttp;
+    public  MutableLiveData<String> mLiveData;
     //订阅者
-    private Disposable mSubscription;
-    public LoginViewModel(@NonNull Application application){
+    private Disposable              mSubscription;
+
+    public LoginViewModel(@NonNull Application application) {
         super(application);
         mContext = getApplication().getApplicationContext();
         mHttp = new HttpImpl(new WeakReference<Context>(mContext));
@@ -54,7 +53,7 @@ public class LoginViewModel extends MyBaseViewModel {
                 .subscribe(new Consumer<BaseResponse>() {
                     @Override
                     public void accept(BaseResponse response) throws Exception {
-                        switch (response.code){
+                        switch (response.code) {
                             case 200:
                                 /**
                                  * 登录成功
@@ -93,6 +92,7 @@ public class LoginViewModel extends MyBaseViewModel {
     /**
      * 动态授权
      * 是否应该检查权限
+     *
      * @return
      */
     public boolean showCheckPermissions() {
@@ -111,19 +111,27 @@ public class LoginViewModel extends MyBaseViewModel {
 
     //登录按钮的点击事件
     public BindingCommand loginOnClickCommand = new BindingCommand(new BindingAction() {
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void call() {
-            if(!isConnected){
+            if (!isConnected) {
                 mLiveData.setValue("网络未连接");
-            }else if(TextUtils.isEmpty(userName.get())){
+            } else if (TextUtils.isEmpty(userName.get())) {
                 mLiveData.setValue("请输入设备号");
-            }else if(TextUtils.isEmpty(passWord.get())){
+            } else if (TextUtils.isEmpty(passWord.get())) {
                 mLiveData.setValue("请输入密码");
-            }else {
+            } else {
                 //调用登录接口
-                mHttp.Login(userName.get(),passWord.get());
+                mHttp.Login(userName.get(), passWord.get(),false);
             }
+        }
+    });
+
+    //取消按钮点击事件
+    public BindingCommand cancelOnClickCommand = new BindingCommand(new BindingAction() {
+        @Override
+        public void call() {
+            getUC().getFinishLiveData().postValue(true);
+            finish();
         }
     });
 }

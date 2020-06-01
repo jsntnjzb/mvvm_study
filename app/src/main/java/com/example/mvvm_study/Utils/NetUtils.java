@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 
 public class NetUtils {
 
-    public static final int DISCONNECTED = 0;
-    public static final int WIFI_CONNECTED = 1;
+    public static final int DISCONNECTED       = 0;
+    public static final int WIFI_CONNECTED     = 1;
     public static final int ETHERNET_CONNECTED = 2;
 
     public static int getNetConnStatus(Context context) {

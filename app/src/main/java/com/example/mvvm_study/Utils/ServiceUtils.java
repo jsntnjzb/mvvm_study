@@ -17,9 +17,10 @@ import java.util.ArrayList;
 public class ServiceUtils {
     /**
      * 启动service
+     *
      * @param mContent 上下文
-     * */
-    public static void startService(Context mContent, Intent intent){
+     */
+    public static void startService(Context mContent, Intent intent) {
         //8.0以上启动service
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mContent.startForegroundService(intent);
@@ -30,7 +31,8 @@ public class ServiceUtils {
 
     /**
      * 判断服务是否开启
-     * @param context 上下文
+     *
+     * @param context     上下文
      * @param ServiceName 服务名
      * @return {@code true}:服务运行中 <br>{@code false}:服务已经停止
      */

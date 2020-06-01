@@ -3,19 +3,19 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
-<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-<!--        <item name="colorAccent">@color/colorAccent</item>-->
+        <!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--        <item name="colorAccent">@color/colorAccent</item>-->
     </style>
 
     <!-- Base application theme. -->
-<!--    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">-->
-<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-<!--        <item name="android:windowNoTitle">true</item>-->
-<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
-<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-<!--        <item name="colorAccent">@color/colorAccent</item>-->
-<!--    </style>-->
+    <!--    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">-->
+    <!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--        <item name="colorAccent">@color/colorAccent</item>-->
+    <!--    </style>-->
 
     <!-- 应用启动页(StartingWindow)的theme -->
     <style name="AppTheme.StartingWindowTheme" parent="AppTheme">
@@ -70,10 +70,10 @@
     <!--头部自定义控件的样式-->
     <declare-styleable name="head_layout_style">
         <!--是否改变背景颜色-->
-        <attr name="isChangeBgColor" format="boolean"/>
+        <attr name="isChangeBgColor" format="boolean" />
         <!--是否显示返回按钮-->
-        <attr name="isShowBAck" format="boolean"/>
+        <attr name="isShowBAck" format="boolean" />
         <!--标题-->
-        <attr name="title" format="string"/>
+        <attr name="title" format="string" />
     </declare-styleable>
 </resources>

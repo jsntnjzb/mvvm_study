@@ -8,11 +8,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.apkfuns.logutils.LogUtils;
+
 import androidx.annotation.MainThread;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
-
-import com.apkfuns.logutils.LogUtils;
 
 /**
  * 创建者 Chuhui
@@ -26,15 +26,15 @@ public class LocationLiveData extends LiveData<Location> {
     private static Context          context;
 
     // GPS定位
-    private final static String GPS_LOCATION = LocationManager.GPS_PROVIDER;
+    private final static String GPS_LOCATION     = LocationManager.GPS_PROVIDER;
     // 网络定位
     private final static String NETWORK_LOCATION = LocationManager.NETWORK_PROVIDER;
     // 解码经纬度最大结果数目
-    private final static int MAX_RESULTS = 1;
+    private final static int    MAX_RESULTS      = 1;
     // 时间更新间隔，单位：ms
-    private final static long MIN_TIME = 1000;
+    private final static long   MIN_TIME         = 1000;
     // 位置刷新距离，单位：m
-    private final static float MIN_DISTANCE = (float) 0.01;
+    private final static float  MIN_DISTANCE     = (float) 0.01;
 
 
     @MainThread

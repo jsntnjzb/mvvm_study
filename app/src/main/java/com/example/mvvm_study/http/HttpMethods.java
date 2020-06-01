@@ -38,9 +38,10 @@ public class HttpMethods {
      */
     private int                  RETRY_COUNT = 3;
     private OkHttpClient.Builder okHttpBuilder;
-    CookieJarImpl mCookieJar;
+    CookieJarImpl         mCookieJar;
     PersistentCookieStore mCookieStore;
     private String baseUrl = "http://47.97.100.152/";
+    public String serverUrl = "https://api.njrhzn.com/";
 
 
     //构造方法私有
@@ -62,15 +63,15 @@ public class HttpMethods {
             }
         });
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//        LoggingInterceptor mLoggingInterceptor = new LoggingInterceptor
-//                .Builder()//构建者模式
-//                .loggable(true) //是否开启日志打印
-//                .setLevel(Level.BODY) //打印的等级
-//                .log(Platform.INFO) // 打印类型
-//                .request("Request") // request的Tag
-//                .response("Response")// Response的Tag
-//                .addHeader("version", BuildConfig.VERSION_NAME)//打印版本
-//                .build();
+        //        LoggingInterceptor mLoggingInterceptor = new LoggingInterceptor
+        //                .Builder()//构建者模式
+        //                .loggable(true) //是否开启日志打印
+        //                .setLevel(Level.BODY) //打印的等级
+        //                .log(Platform.INFO) // 打印类型
+        //                .request("Request") // request的Tag
+        //                .response("Response")// Response的Tag
+        //                .addHeader("version", BuildConfig.VERSION_NAME)//打印版本
+        //                .build();
         mCookieStore = new PersistentCookieStore(MyApp.getInstance());
         mCookieJar = new CookieJarImpl(mCookieStore);
         okHttpBuilder.addInterceptor(loggingInterceptor)
@@ -79,7 +80,7 @@ public class HttpMethods {
                 .build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(serverUrl)
                 .client(okHttpBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())//json转换成JavaBean
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -92,12 +93,12 @@ public class HttpMethods {
         public Response intercept(Chain chain) throws IOException {
             Response originalResponse = chain.proceed(chain.request());
             if (!originalResponse.headers("Set-Cookie").isEmpty()) {
-//                HashSet<String> cookies = new HashSet<>();
-//                for (String header : originalResponse.headers("Set-Cookie")) {
-//                    cookies.add(header);
-//                }
+                //                HashSet<String> cookies = new HashSet<>();
+                //                for (String header : originalResponse.headers("Set-Cookie")) {
+                //                    cookies.add(header);
+                //                }
                 //SPUtils.put(MyApp.getInstance(),"config",cookies);
-               List<Cookie> cookieList = mCookieStore.getCookie(originalResponse.request().url());
+                List<Cookie> cookieList = mCookieStore.getCookie(originalResponse.request().url());
             }
             return originalResponse;
         }

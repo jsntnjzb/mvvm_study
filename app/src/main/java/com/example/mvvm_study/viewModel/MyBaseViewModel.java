@@ -3,7 +3,6 @@ package com.example.mvvm_study.viewModel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-
 import me.goldze.mvvmhabit.base.BaseViewModel;
 
 /**
@@ -13,7 +12,7 @@ import me.goldze.mvvmhabit.base.BaseViewModel;
  * @描述
  */
 public abstract class MyBaseViewModel extends BaseViewModel {
-    public  boolean    isConnected = true;
+    public boolean isConnected = true;
 
     public MyBaseViewModel(@NonNull Application application) {
         super(application);

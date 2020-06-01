@@ -14,8 +14,8 @@ public class ServiceViewModel extends ViewModel {
 
     /**
      * 判断是否是同一台设备登录
-     * */
-    public boolean isSameDevice(){
+     */
+    public boolean isSameDevice() {
         return false;
     }
 }

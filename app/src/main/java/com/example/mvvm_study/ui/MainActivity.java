@@ -11,6 +11,7 @@ import com.example.mvvm_study.R;
 public class MainActivity extends Activity {
 
     Button btn_link_to_login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +20,7 @@ public class MainActivity extends Activity {
         btn_link_to_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent login_intent = new Intent(MainActivity.this,LoginActivity.class);
+                Intent login_intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(login_intent);
             }
         });

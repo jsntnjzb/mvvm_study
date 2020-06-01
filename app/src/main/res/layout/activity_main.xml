@@ -16,6 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@null"
-        android:text="登录页"/>
+        android:text="登录页" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

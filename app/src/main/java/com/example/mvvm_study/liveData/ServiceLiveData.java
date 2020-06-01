@@ -1,14 +1,10 @@
 package com.example.mvvm_study.liveData;
 
 import android.content.Context;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 
 import com.example.mvvm_study.Utils.ServiceUtils;
-import com.example.mvvm_study.broadcastReceiver.NetworkReceiver;
+
+import androidx.lifecycle.LiveData;
 
 /**
  * 创建者 Chuhui
@@ -17,9 +13,10 @@ import com.example.mvvm_study.broadcastReceiver.NetworkReceiver;
  * @描述 监测service状态数据存储
  */
 public class ServiceLiveData extends LiveData {
-    static               ServiceLiveData mServiceLiveData;
-    private final        Context         mContext;
-    boolean isServiceRunning;
+    static        ServiceLiveData mServiceLiveData;
+    private final Context         mContext;
+    boolean isServiceRunning;//service是否正在运行
+
     public ServiceLiveData(Context context) {
         mContext = context.getApplicationContext();
     }
@@ -34,15 +31,15 @@ public class ServiceLiveData extends LiveData {
     @Override
     protected void onActive() {
         super.onActive();
-        isServiceRunning = ServiceUtils.isServiceRunning(mContext,"com.example.mvvm_study.service.ForegroundService");
+        isServiceRunning = ServiceUtils.isServiceRunning(mContext, "com.example.mvvm_study.service.ForegroundService");
+        if(!isServiceRunning){
+            //启动service
+           // ServiceUtils.startService();
+        }
     }
 
     @Override
     protected void onInactive() {
         super.onInactive();
-    }
-
-    public static void isServiceRunning(){
-
     }
 }

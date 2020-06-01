@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:binding="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
         <variable
             type="com.example.mvvm_study.viewModel.LoginViewModel"
-            name="loginUser"/>
+            name="loginUser" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rl_root"
         android:layout_width="match_parent"
@@ -26,7 +28,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintVertical_bias="0.15"
             app:layout_constraintHorizontal_bias="0.5"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/tv_welcome"
@@ -46,7 +48,8 @@
             android:singleLine="true"
             android:text="欢迎您使用尔悟管理系统"
             android:textSize="20sp"
-            android:gravity="center"/>
+            android:gravity="center" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_equipmentId"
@@ -78,7 +81,7 @@
                 app:layout_constraintHorizontal_bias="0"
                 android:gravity="center_vertical|left"
                 android:text="设备号:"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/edit_equipmentId"
@@ -95,7 +98,7 @@
                 android:paddingLeft="10dp"
                 android:background="@drawable/password_background"
                 android:singleLine="true"
-                android:text="@={loginUser.userName}"/>
+                android:text="@={loginUser.userName}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -166,7 +169,7 @@
                 android:background="@drawable/password_background"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:text="@={loginUser.passWord}"/>
+                android:text="@={loginUser.passWord}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -199,7 +202,7 @@
                 android:textColor="#ffffffff"
                 android:textSize="18sp"
                 android:background="@drawable/btn_login_bg_selector"
-                binding:onClickCommand="@{loginUser.loginOnClickCommand}"/>
+                binding:onClickCommand="@{loginUser.loginOnClickCommand}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -227,8 +230,9 @@
                 android:enabled="true"
                 android:textColor="#ffffffff"
                 android:textSize="18sp"
-                android:background="@drawable/btn_cancel_bg_selector"/>
+                android:background="@drawable/btn_cancel_bg_selector"
+                binding:onClickCommand="@{loginUser.cancelOnClickCommand}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout
-     >
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+

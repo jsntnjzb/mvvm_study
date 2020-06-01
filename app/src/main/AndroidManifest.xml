@@ -42,7 +42,7 @@
             android:enabled="true">
             <!--设置优先级-->
             <intent-filter android:priority="1000">
-<!--                <action android:name="com.example.mvvm_study.service."></action>-->
+                <action android:name="com.example.mvvm_study.service.ForegroundService"></action>
             </intent-filter>
         </service>
     </application>

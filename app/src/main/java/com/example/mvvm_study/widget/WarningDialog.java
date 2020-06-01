@@ -12,12 +12,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.example.mvvm_study.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.annotation.NonNull;
 
 /**
  * 创建者 Chuhui
@@ -26,13 +26,13 @@ import java.util.TimerTask;
  * @描述 预警提示框
  */
 public class WarningDialog extends Dialog {
-    private int layoutResID;//布局文件Id
-    private View mView;
-    private TextView tv_tip;
+    private int       layoutResID;//布局文件Id
+    private View      mView;
+    private TextView  tv_tip;
     private ImageView iv;
     Timer    timer;
     Activity activity;
-    Context mContext;
+    Context  mContext;
     public static final int DIALOG_SHOW_TIME_SHORT = 2000;
 
     public WarningDialog(@NonNull Context context) {
@@ -42,18 +42,18 @@ public class WarningDialog extends Dialog {
     public WarningDialog(@NonNull Context context, int layoutResID, int themeResId) {
         super(context, themeResId);
         this.layoutResID = layoutResID;
-        if(context==null){
+        if (context == null) {
             return;
         }
         mContext = context;
-        if(mContext instanceof Activity){
-            activity = (Activity)context;
+        if (mContext instanceof Activity) {
+            activity = (Activity) context;
         }
 
 
         Window dialogWindow = getWindow();
         dialogWindow.setGravity(Gravity.CENTER);//设置dialog显示居中
-        mView = LayoutInflater.from(context).inflate(this.layoutResID,null);
+        mView = LayoutInflater.from(context).inflate(this.layoutResID, null);
         setContentView(mView);
         tv_tip = mView.findViewById(R.id.tv_msg);
         iv = mView.findViewById(R.id.iv);
@@ -75,20 +75,20 @@ public class WarningDialog extends Dialog {
     }
 
 
-    void showMsg(boolean isSuccess,String msg){
-        if(isSuccess){
+    void showMsg(boolean isSuccess, String msg) {
+        if (isSuccess) {
             iv.setImageResource(R.mipmap.load_success);
-        }else {
+        } else {
             iv.setImageResource(R.mipmap.load_fail);
         }
         tv_tip.setText(msg);
     }
 
-    public void show(boolean isSuccess,String msg){
-        if(activity!=null && !activity.isFinishing()){
-            if(!isShowing()){
-                showMsg(isSuccess,msg);
-                if(timer==null){
+    public void show(boolean isSuccess, String msg) {
+        if (activity != null && !activity.isFinishing()) {
+            if (!isShowing()) {
+                showMsg(isSuccess, msg);
+                if (timer == null) {
                     timer = new Timer();
                 }
                 timer.schedule(new TimerTask() {
@@ -96,31 +96,31 @@ public class WarningDialog extends Dialog {
                     public void run() {
                         dismiss();
                     }
-                },DIALOG_SHOW_TIME_SHORT);
+                }, DIALOG_SHOW_TIME_SHORT);
                 super.show();
             }
         }
     }
 
-    public void showErrorMsg(String msg){
-        if(mContext instanceof Activity){
-            if(activity!=null){
-                if(!activity.isFinishing()){
-                    if(!isShowing()){
-                        showMsg(false,msg);
+    public void showErrorMsg(String msg) {
+        if (mContext instanceof Activity) {
+            if (activity != null) {
+                if (!activity.isFinishing()) {
+                    if (!isShowing()) {
+                        showMsg(false, msg);
                     }
                 }
             }
-        }else {
-            if(!isShowing()){
-                showMsg(false,msg);
+        } else {
+            if (!isShowing()) {
+                showMsg(false, msg);
             }
         }
         super.show();
     }
 
-    public void dismiss(){
-        if(isShowing()){
+    public void dismiss() {
+        if (isShowing()) {
             super.dismiss();
         }
     }

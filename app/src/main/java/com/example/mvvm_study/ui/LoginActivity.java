@@ -26,12 +26,14 @@ import io.reactivex.functions.Consumer;
 import me.goldze.mvvmhabit.base.AppManager;
 import me.goldze.mvvmhabit.base.BaseActivity;
 import me.goldze.mvvmhabit.utils.SPUtils;
+import me.goldze.mvvmhabit.utils.StringUtils;
 
 
 public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel>{
     LoginViewModel mLoginViewModel;
     WarningDialog mWarningDialog;
     Observer<String> mNetObserver,mLoginObserver;
+    Observer<Boolean> cancelObserver;
 
     @Override
     public int initContentView(Bundle bundle) {
@@ -59,6 +61,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     public void initData() {
         super.initData();
+        AppManager.getAppManager().addActivity(this);
         //动态权限申请
         if(mLoginViewModel.showCheckPermissions()){
             rxLocationPermissionRequest();
@@ -85,27 +88,37 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         mLoginObserver = new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if(!TextUtils.isEmpty(s)){
+                if(!StringUtils.isTrimEmpty(s)){
                     mWarningDialog.show(false,s);
                 }else {
                     //保存设备号,密码
                     SPUtils.getInstance().put("equipmentId",mLoginViewModel.userName.get());
                     SPUtils.getInstance().put("pwd",mLoginViewModel.passWord.get());
                     //开启service
-                    Intent intent = new Intent(LoginActivity.this, ForegroundService.class);
+                   // Intent intent = new Intent(LoginActivity.this, ForegroundService.class);
                    // intent.setAction(ConstUtils.LOGINSUCCESS);
-                    ServiceUtils.startService(LoginActivity.this,intent);
+                    //ServiceUtils.startService(LoginActivity.this,intent);
 //                    ServiceLiveData.getInstance(LoginActivity.this).observeForever();
 
                     //登录成功,跳转至管理员模式activity
                     ARouter.getInstance().build(ARouterPath.AdminMenuAty).navigation();
                     AppManager.getAppManager().finishActivity(LoginActivity.this);
-                    finish();
                 }
             }
         };
         //登录结果监测回调
         mLoginViewModel.mLiveData.observe(this,mLoginObserver);
+
+        //取消
+        cancelObserver = new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    AppManager.getAppManager().finishActivity(LoginActivity.this);
+                }
+            }
+        };
+        mLoginViewModel.getUC().getFinishLiveData().observe(this,cancelObserver);
     }
 
     private void rxLocationPermissionRequest() {
@@ -127,9 +140,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mLoginViewModel.mLiveData.removeObserver(mLoginObserver);
         NetworkLiveData.getInstance(this).removeObserver(mNetObserver);
         mWarningDialog.dismiss();
         mWarningDialog = null;
+        AppManager.getAppManager().removeActivity(this);
     }
 }

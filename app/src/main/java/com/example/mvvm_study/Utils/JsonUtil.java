@@ -51,8 +51,8 @@ public class JsonUtil {
             for (int i = 0; i < list.size(); i++) {
                 if (i != list.size() - 1) {
                     str += gson.toJson(list.get(i)) + ",";
-                }else if (i == list.size() - 1){
-                    str +=  gson.toJson(list.get(i)) + "]";
+                } else if (i == list.size() - 1) {
+                    str += gson.toJson(list.get(i)) + "]";
                 }
             }
         }

@@ -28,7 +28,7 @@ public class MyApp extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        if(isDebugARouter){
+        if (isDebugARouter) {
             ARouter.openLog();
             ARouter.openDebug();
         }

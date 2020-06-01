@@ -15,27 +15,27 @@ public class NetworkReceiver extends BroadcastReceiver {
         ConnectivityManager conn = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         BaseResponse baseResponse = new BaseResponse();
         NetworkInfo networkInfo = conn.getActiveNetworkInfo();
-        if(networkInfo==null){
+        if (networkInfo == null) {
             baseResponse.code = ConstUtils.HAVENONET;
             baseResponse.message = "未接入网络";
             baseResponse.isConnected = false;
             //RxBus.getDefault().post(baseResponse);
-        }else if (!networkInfo.isConnected()) {
+        } else if (!networkInfo.isConnected()) {
             //Toast.makeText(context, "请检查手机网络连接", Toast.LENGTH_SHORT).show();
             baseResponse.code = ConstUtils.NETNOTCONNECTED;
             baseResponse.message = "网络未连接";
             baseResponse.isConnected = false;
-//            RxBus.getDefault().post(baseResponse);
+            //            RxBus.getDefault().post(baseResponse);
         } else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
             //wifi
             baseResponse.code = ConstUtils.NETCONNECTED;
             baseResponse.isConnected = true;
-//            RxBus.getDefault().post(baseResponse);
+            //            RxBus.getDefault().post(baseResponse);
         } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
             //手机网络
             baseResponse.code = ConstUtils.NETCONNECTED;
             baseResponse.isConnected = true;
-//            RxBus.getDefault().post(baseResponse);
+            //            RxBus.getDefault().post(baseResponse);
         }
     }
 }

@@ -10,10 +10,10 @@ public class OnSuccessAndFault<T> extends OnBaseSuccessAndFault<BaseResponse<T>>
     /**
      * 是否需要显示默认Loading
      */
-    private boolean     showProgress = false;
-    private Context     mContext;
-//    private LoadingView mLoadingView;
-    private String showMsg = "正在加载...";
+    private boolean showProgress = false;
+    private Context mContext;
+    //    private LoadingView mLoadingView;
+    private String  showMsg      = "正在加载...";
 
     /**
      * @param mOnBaseListener 成功回调监听
@@ -44,22 +44,22 @@ public class OnSuccessAndFault<T> extends OnBaseSuccessAndFault<BaseResponse<T>>
 
 
     private void showProgressDialog() {
-//        if (showProgress) {
-//            if(mLoadingView==null){
-//                mLoadingView = new LoadingView(mContext, R.layout.loading_view,R.style.shoppingCartDialog);
-//            }
-//            mLoadingView.show("正在加载...");
-//        }
+        //        if (showProgress) {
+        //            if(mLoadingView==null){
+        //                mLoadingView = new LoadingView(mContext, R.layout.loading_view,R.style.shoppingCartDialog);
+        //            }
+        //            mLoadingView.show("正在加载...");
+        //        }
     }
 
 
     private void dismissProgressDialog() {
-//        if(showProgress){
-//            if(mLoadingView.isShowing()){
-//                mLoadingView.dismiss();
-//                mLoadingView = null;
-//            }
-//        }
+        //        if(showProgress){
+        //            if(mLoadingView.isShowing()){
+        //                mLoadingView.dismiss();
+        //                mLoadingView = null;
+        //            }
+        //        }
     }
 
     /**
@@ -94,7 +94,7 @@ public class OnSuccessAndFault<T> extends OnBaseSuccessAndFault<BaseResponse<T>>
     @Override
     public void onNext(BaseResponse<T> response) {
         if (response.code == 200) {
-           mOnBaseListener.onSuccess(response);
+            mOnBaseListener.onSuccess(response);
         } else {
             mOnBaseListener.onFault(response);
         }

@@ -1,9 +1,8 @@
 package com.example.mvvm_study.http;
 
-import androidx.collection.ArrayMap;
-
 import com.example.mvvm_study.http.entities.BaseResponse;
 
+import androidx.collection.ArrayMap;
 import io.reactivex.Observable;
 import io.reactivex.observers.DisposableObserver;
 

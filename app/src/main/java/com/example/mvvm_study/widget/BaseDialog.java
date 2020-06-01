@@ -5,7 +5,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
-
 import me.goldze.mvvmhabit.base.BaseViewModel;
 
 /**

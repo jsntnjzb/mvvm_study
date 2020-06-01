@@ -1,11 +1,10 @@
 package com.example.mvvm_study.http.service;
 
-import androidx.collection.ArrayMap;
-
 import com.example.mvvm_study.http.entities.BaseResponse;
 
 import java.util.Map;
 
+import androidx.collection.ArrayMap;
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -32,7 +31,7 @@ public interface HttpApi {
 
     /**
      * 心跳
-     * */
+     */
     @GET("/heartbeat/{deviceCode}")
     Observable<BaseResponse<Object>> getHeartBeat(@Path("deviceCode") String deviceCode);
 
@@ -45,13 +44,13 @@ public interface HttpApi {
 
     /**
      * 更新设备地址信息
-     * */
+     */
     @GET("/device/update")
     Observable<BaseResponse<Object>> updateDeviceLocation(@QueryMap Map<String, String> map);
 
     /**
      * 更新设备状态
-     * */
+     */
     @GET("/device/update")
     Observable<BaseResponse<Object>> updateDeviceStatus(@QueryMap Map<String, String> map);
 
@@ -88,13 +87,13 @@ public interface HttpApi {
 
     /**
      * 修改订单
-     * */
+     */
     @GET("/goodsOrder/update")
     Observable<BaseResponse<Object>> updateOrder(@Query("id") long id, @Query("orderStatus") int orderStatus);
 
     /**
      * 修改订单状态
-     * */
+     */
     @GET("/goodsOrder/status/update")
     Observable<BaseResponse<Object>> updateOrderStatus(@Query("orderId") long id, @Query("orderStatus") int orderStatus);
 
@@ -113,8 +112,8 @@ public interface HttpApi {
     /**
      * 冲泡配方列表
      */
-//    @GET("/formula")
-//    Observable<BaseResponse<ArrayList<PeiFang>>> getFormulaList();
+    //    @GET("/formula")
+    //    Observable<BaseResponse<ArrayList<PeiFang>>> getFormulaList();
 
     /**
      * 查询订单支付状态
@@ -124,13 +123,13 @@ public interface HttpApi {
 
     /**
      * 提交故障信息
-     * */
+     */
     @FormUrlEncoded
     @POST("/malfunctionLog")
     Observable<BaseResponse<Object>> addMalfunctionLog(@FieldMap Map<String, String> map);
 
     /**
-     *广告投放
+     * 广告投放
      */
     @GET("/commercialAdvertiseLog/list")
     Observable<BaseResponse<Object>> getCommercialAdvertiseLog(@QueryMap Map<String, Integer> map);
