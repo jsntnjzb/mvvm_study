@@ -14,7 +14,6 @@ import com.example.mvvm_study.ui.MainActivity;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.lifecycle.Observer;
 
 /**
  * 创建者 Chuhui

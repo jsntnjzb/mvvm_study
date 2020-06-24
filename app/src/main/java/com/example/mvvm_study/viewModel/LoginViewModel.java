@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mvvm_study.http.HttpImpl;
 import com.example.mvvm_study.http.entities.BaseResponse;
 
@@ -37,7 +36,7 @@ public class LoginViewModel extends MyBaseViewModel {
     public LoginViewModel(@NonNull Application application) {
         super(application);
         mContext = getApplication().getApplicationContext();
-        mHttp = new HttpImpl(new WeakReference<Context>(mContext));
+        mHttp = new HttpImpl(new WeakReference(mContext));
         mLiveData = new MutableLiveData<>();
     }
 
@@ -121,7 +120,7 @@ public class LoginViewModel extends MyBaseViewModel {
                 mLiveData.setValue("请输入密码");
             } else {
                 //调用登录接口
-                mHttp.Login(userName.get(), passWord.get(),false);
+                mHttp.Login(userName.get(), passWord.get(), false);
             }
         }
     });

@@ -3,11 +3,11 @@ package com.example.mvvm_study.http.service;
 
 public interface HttpInterface {
     /**
-     * @param deviceCode 设备code
-     * @param password   登陆密码
+     * @param deviceCode  设备code
+     * @param password    登陆密码
      * @param isAutoLogin 是否自动登录
      */
-    public void Login(String deviceCode, String password,boolean isAutoLogin);
+    public void Login(String deviceCode, String password, boolean isAutoLogin);
 
     //    /**
     //     * 获取服务器设备配置的商品信息

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:binding="http://schemas.android.com/apk/res-auto">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View"/>
         <variable
-            type="com.example.mvvm_study.viewModel.AdminMenuViewModel"
-            name="adminMenu" />
+            name="title"
+            type="String"/>
+        <variable
+            name="isShowBAck"
+            type="boolean"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,77 +19,79 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/admin_head_bg_color">
-    <TextView
-        android:id="@+id/tv_now_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintVertical_bias="0.2"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="7sp"
-        android:autoSizeMaxTextSize="112sp"
-        android:autoSizeStepGranularity="1sp"
-        android:text="12:00"
-        android:visibility="gone"
-        android:textColor="#ffffff"
-        android:singleLine="true" />
 
-    <ImageButton
-        android:id="@+id/img_btn_back"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.1"
-        app:layout_constraintHeight_percent="1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/tv_title"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintHorizontal_bias="0.1"
-        android:background="@null"
-        android:src="@mipmap/go_back"
-        binding:onClickCommand="@{adminMenu.back_ClickCommand}"/>
+        <TextView
+            android:id="@+id/tv_now_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintVertical_bias="0.2"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="7sp"
+            android:autoSizeMaxTextSize="112sp"
+            android:autoSizeStepGranularity="1sp"
+            android:text="12:00"
+            android:visibility="gone"
+            android:textColor="#ffffff"
+            android:singleLine="true" />
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.4"
-        app:layout_constraintHeight_percent="0.28"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.5"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="11sp"
-        android:autoSizeMaxTextSize="112sp"
-        android:autoSizeStepGranularity="1sp"
-        android:gravity="center"
-        android:text="管理员模式"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="#ffffff"
-        android:singleLine="true" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/img_btn_back"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.1"
+            app:layout_constraintHeight_percent="1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tv_title"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintHorizontal_bias="0.1"
+            android:background="@null"
+            android:src="@mipmap/go_back"
+            android:visibility="@{isShowBAck?View.VISIBLE : View.GONE}"/>
 
-    <ImageButton
-        android:id="@+id/img_btn_switch_mode"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.1"
-        app:layout_constraintHeight_percent="1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/tv_title"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintHorizontal_bias="0.9"
-        android:background="@null"
-        android:src="@mipmap/switch_mode" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintHeight_percent="0.28"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.5"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="11sp"
+            android:autoSizeMaxTextSize="112sp"
+            android:autoSizeStepGranularity="1sp"
+            android:gravity="center"
+            android:text="@{title}"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:singleLine="true" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/img_btn_switch_mode"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.1"
+            app:layout_constraintHeight_percent="1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tv_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintHorizontal_bias="0.9"
+            android:background="@null"
+            android:src="@mipmap/switch_mode" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

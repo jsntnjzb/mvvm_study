@@ -11,4 +11,16 @@ public class ARouterPath {
      * 管理员模式Activity
      */
     public static final String AdminMenuAty = "/admin/admin_menu";
+
+    /**
+     * 售卖界面(首页)
+     * */
+    public static final String MainAty = "/MainActivity";
+
+    /**
+     * 设备配置页
+     * */
+    public static final String ECAty = "/EquipmentConfigurationActivity";
+
+
 }

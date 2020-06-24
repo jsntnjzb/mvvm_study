@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             type="com.example.mvvm_study.viewModel.LoginViewModel"
             name="loginUser" />
@@ -231,7 +232,7 @@
                 android:textColor="#ffffffff"
                 android:textSize="18sp"
                 android:background="@drawable/btn_cancel_bg_selector"
-                binding:onClickCommand="@{loginUser.cancelOnClickCommand}"/>
+                binding:onClickCommand="@{loginUser.cancelOnClickCommand}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

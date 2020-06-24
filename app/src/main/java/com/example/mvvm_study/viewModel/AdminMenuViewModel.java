@@ -13,18 +13,12 @@ import me.goldze.mvvmhabit.binding.command.BindingCommand;
  * @描述
  */
 public class AdminMenuViewModel extends MyBaseViewModel {
+    public boolean isShowBAck;//是否显示back按钮
+    public String title="管理员模式";//头部标题
+
     public AdminMenuViewModel(@NonNull Application application) {
         super(application);
     }
-
-    //回退
-    public BindingCommand back_ClickCommand = new BindingCommand(new BindingAction() {
-        @Override
-        public void call() {
-            getUC().getFinishLiveData().postValue(true);
-            finish();
-        }
-    });
 
     //设备配置页点击事件
     public BindingCommand to_EquipmentConfiguration_ClickCommand = new BindingCommand(new BindingAction() {

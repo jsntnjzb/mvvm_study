@@ -2,7 +2,6 @@ package com.example.mvvm_study.Utils;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import me.goldze.mvvmhabit.utils.KLog;

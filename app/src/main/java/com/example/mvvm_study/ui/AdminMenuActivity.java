@@ -10,7 +10,6 @@ import com.example.mvvm_study.base.ARouterPath;
 import com.example.mvvm_study.databinding.ActivityAdminMenuBinding;
 import com.example.mvvm_study.liveData.NetworkLiveData;
 import com.example.mvvm_study.viewModel.AdminMenuViewModel;
-import com.example.mvvm_study.viewModel.LoginViewModel;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,8 +25,8 @@ import me.goldze.mvvmhabit.base.BaseActivity;
 
 @Route(path = ARouterPath.AdminMenuAty)
 public class AdminMenuActivity extends BaseActivity<ActivityAdminMenuBinding, AdminMenuViewModel> {
-    Observer<String> mNetObserver;
-    Observer<Boolean> cancelObserver;
+    Observer<String>   mNetObserver;
+    Observer<Boolean>  cancelObserver;
     AdminMenuViewModel mAdminMenuViewModel;
 
     @Override
@@ -44,6 +43,10 @@ public class AdminMenuActivity extends BaseActivity<ActivityAdminMenuBinding, Ad
     public AdminMenuViewModel initViewModel() {
         mAdminMenuViewModel = ViewModelProviders.of(this).get(AdminMenuViewModel.class);
         return mAdminMenuViewModel;
+    }
+
+    @Override
+    public void initData() {
     }
 
     @Override
@@ -67,11 +70,11 @@ public class AdminMenuActivity extends BaseActivity<ActivityAdminMenuBinding, Ad
         cancelObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
                     AppManager.getAppManager().finishActivity(AdminMenuActivity.this);
                 }
             }
         };
-        mAdminMenuViewModel.getUC().getFinishLiveData().observe(this,cancelObserver);
+        mAdminMenuViewModel.getUC().getFinishLiveData().observe(this, cancelObserver);
     }
 }

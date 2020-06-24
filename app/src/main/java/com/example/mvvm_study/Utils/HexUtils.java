@@ -175,12 +175,14 @@ public class HexUtils {
     }
 
 
-     /**生成一个0 到 count 之间的随机数
+    /**
+     * 生成一个0 到 count 之间的随机数
+     *
      * @param endNum
      * @return
-      */
-    public static int getNum(int endNum){
-        if(endNum > 0){
+     */
+    public static int getNum(int endNum) {
+        if (endNum > 0) {
             Random random = new Random();
             return random.nextInt(endNum);
         }

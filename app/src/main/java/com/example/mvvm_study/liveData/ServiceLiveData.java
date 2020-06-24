@@ -32,9 +32,9 @@ public class ServiceLiveData extends LiveData {
     protected void onActive() {
         super.onActive();
         isServiceRunning = ServiceUtils.isServiceRunning(mContext, "com.example.mvvm_study.service.ForegroundService");
-        if(!isServiceRunning){
+        if (!isServiceRunning) {
             //启动service
-           // ServiceUtils.startService();
+            // ServiceUtils.startService();
         }
     }
 

@@ -40,8 +40,8 @@ public class HttpMethods {
     private OkHttpClient.Builder okHttpBuilder;
     CookieJarImpl         mCookieJar;
     PersistentCookieStore mCookieStore;
-    private String baseUrl = "http://47.97.100.152/";
-    public String serverUrl = "https://api.njrhzn.com/";
+    private String baseUrl   = "http://47.97.100.152/";
+    public  String serverUrl = "https://api.njrhzn.com/";
 
 
     //构造方法私有

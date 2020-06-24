@@ -3,7 +3,6 @@ package com.example.mvvm_study.http;
 import android.content.Context;
 
 import com.example.mvvm_study.http.entities.BaseResponse;
-import com.example.mvvm_study.http.entities.LoginBackData;
 import com.example.mvvm_study.http.service.HttpInterface;
 import com.example.mvvm_study.http.service.OnBaseListener;
 
@@ -25,12 +24,13 @@ public class HttpImpl implements HttpInterface {
 
     /**
      * 登录
-     * @param deviceCode 设备号
-     * @param password   密码
+     *
+     * @param deviceCode  设备号
+     * @param password    密码
      * @param isAutoLogin 是否自动登录
      */
     @Override
-    public void Login(final String deviceCode, final String password,final boolean isAutoLogin) {
+    public void Login(final String deviceCode, final String password, final boolean isAutoLogin) {
         final ArrayMap<String, String> map = new ArrayMap<>();
         map.put("deviceCode", deviceCode);
         map.put("password", password);

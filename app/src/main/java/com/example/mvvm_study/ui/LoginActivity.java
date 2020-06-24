@@ -1,27 +1,21 @@
 package com.example.mvvm_study.ui;
 
 import android.Manifest;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.mvvm_study.BR;
 import com.example.mvvm_study.R;
-import com.example.mvvm_study.Utils.ConstUtils;
-import com.example.mvvm_study.Utils.ServiceUtils;
 import com.example.mvvm_study.base.ARouterPath;
 import com.example.mvvm_study.databinding.ActivityLoginBinding;
 import com.example.mvvm_study.liveData.NetworkLiveData;
-import com.example.mvvm_study.liveData.ServiceLiveData;
-import com.example.mvvm_study.service.ForegroundService;
 import com.example.mvvm_study.viewModel.LoginViewModel;
 import com.example.mvvm_study.widget.WarningDialog;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.functions.Consumer;
 import me.goldze.mvvmhabit.base.AppManager;
 import me.goldze.mvvmhabit.base.BaseActivity;
@@ -29,10 +23,10 @@ import me.goldze.mvvmhabit.utils.SPUtils;
 import me.goldze.mvvmhabit.utils.StringUtils;
 
 
-public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel>{
-    LoginViewModel mLoginViewModel;
-    WarningDialog mWarningDialog;
-    Observer<String> mNetObserver,mLoginObserver;
+public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewModel> {
+    LoginViewModel   mLoginViewModel;
+    WarningDialog    mWarningDialog;
+    Observer<String> mNetObserver, mLoginObserver;
     Observer<Boolean> cancelObserver;
 
     @Override
@@ -54,7 +48,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mWarningDialog = new WarningDialog(this,R.layout.warning_dialog,R.style.WarningDialog);
+        mWarningDialog = new WarningDialog(this, R.layout.warning_dialog, R.style.WarningDialog);
     }
 
 
@@ -63,7 +57,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         super.initData();
         AppManager.getAppManager().addActivity(this);
         //动态权限申请
-        if(mLoginViewModel.showCheckPermissions()){
+        if (mLoginViewModel.showCheckPermissions()) {
             rxLocationPermissionRequest();
         }
     }
@@ -74,10 +68,10 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         mNetObserver = new Observer<String>() {
             @Override
             public void onChanged(String message) {
-                if(!TextUtils.isEmpty(message)){
-                    mWarningDialog.show(false,message);
+                if (!TextUtils.isEmpty(message)) {
+                    mWarningDialog.show(false, message);
                     mLoginViewModel.isConnected = false;
-                }else {
+                } else {
                     mLoginViewModel.isConnected = true;
                 }
             }
@@ -88,17 +82,17 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         mLoginObserver = new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if(!StringUtils.isTrimEmpty(s)){
-                    mWarningDialog.show(false,s);
-                }else {
+                if (!StringUtils.isTrimEmpty(s)) {
+                    mWarningDialog.show(false, s);
+                } else {
                     //保存设备号,密码
-                    SPUtils.getInstance().put("equipmentId",mLoginViewModel.userName.get());
-                    SPUtils.getInstance().put("pwd",mLoginViewModel.passWord.get());
+                    SPUtils.getInstance().put("equipmentId", mLoginViewModel.userName.get());
+                    SPUtils.getInstance().put("pwd", mLoginViewModel.passWord.get());
                     //开启service
-                   // Intent intent = new Intent(LoginActivity.this, ForegroundService.class);
-                   // intent.setAction(ConstUtils.LOGINSUCCESS);
+                    // Intent intent = new Intent(LoginActivity.this, ForegroundService.class);
+                    // intent.setAction(ConstUtils.LOGINSUCCESS);
                     //ServiceUtils.startService(LoginActivity.this,intent);
-//                    ServiceLiveData.getInstance(LoginActivity.this).observeForever();
+                    //                    ServiceLiveData.getInstance(LoginActivity.this).observeForever();
 
                     //登录成功,跳转至管理员模式activity
                     ARouter.getInstance().build(ARouterPath.AdminMenuAty).navigation();
@@ -107,18 +101,18 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
             }
         };
         //登录结果监测回调
-        mLoginViewModel.mLiveData.observe(this,mLoginObserver);
+        mLoginViewModel.mLiveData.observe(this, mLoginObserver);
 
         //取消
         cancelObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
                     AppManager.getAppManager().finishActivity(LoginActivity.this);
                 }
             }
         };
-        mLoginViewModel.getUC().getFinishLiveData().observe(this,cancelObserver);
+        mLoginViewModel.getUC().getFinishLiveData().observe(this, cancelObserver);
     }
 
     private void rxLocationPermissionRequest() {
